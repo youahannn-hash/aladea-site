@@ -1,0 +1,12 @@
+* text=auto
+*.html text
+*.css text
+*.js text
+*.md text
+*.yml text
+*.json text
+*.xml text
+*.txt text
+*.jpg binary
+*.png binary
+*.webp binary

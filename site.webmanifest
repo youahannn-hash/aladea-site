@@ -1,0 +1,23 @@
+﻿{
+  "name": "АлаДея — кондитерская во Владикавказе",
+  "short_name": "АлаДея",
+  "description": "Торты, десерты и шоколадные букеты ручной работы.",
+  "lang": "ru",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#F8F2E9",
+  "theme_color": "#0E5F5B",
+  "icons": [
+    {
+      "src": "assets/img/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/img/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}
