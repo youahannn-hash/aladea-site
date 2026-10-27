@@ -12,11 +12,19 @@
   <meta property="og:title" content="АлаДея — кондитерская во Владикавказе">
   <meta property="og:description" content="Торты, десерты и шоколадные букеты ручной работы. Кирова, 53. Заказ в WhatsApp.">
   <meta property="og:image" content="https://youahannn-hash.github.io/aladea-site/assets/img/og-cover.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="АлаДея — торты, десерты и свежая выпечка во Владикавказе">
   <meta property="og:url" content="https://youahannn-hash.github.io/aladea-site/">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="АлаДея — кондитерская во Владикавказе">
+  <meta name="twitter:description" content="Торты, десерты и свежая выпечка ручной работы. Кирова, 53. Заказ в WhatsApp.">
+  <meta name="twitter:image" content="https://youahannn-hash.github.io/aladea-site/assets/img/og-cover.jpg">
+  <link rel="canonical" href="https://youahannn-hash.github.io/aladea-site/">
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
   <link rel="manifest" href="site.webmanifest">
+  <link rel="preload" as="image" href="assets/img/hero-cake.jpg" fetchpriority="high">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -45,6 +53,54 @@
       "opens": "10:00",
       "closes": "19:00"
     }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Как оформить заказ?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Добавьте позиции в корзину и отправьте заказ в WhatsApp или позвоните по телефону. Мы подтвердим состав, сумму и время."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "За сколько дней заказывать торт?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Чем раньше, тем больше вариантов декора. Напишите дату праздника — подскажем, что успеем подготовить, и предложим подходящий торт."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Можно ли учесть аллергии?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Да. Расскажите об аллергии и ограничениях — предложим подходящую начинку и состав."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Как проходит доставка?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Доставляем по Владикавказу. Стоимость и интервал согласуем при подтверждении заказа. Также можно забрать заказ самостоятельно."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Как оплатить заказ?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Принимаем наличные, карту и перевод. Способ оплаты подтвердим при оформлении."
+        }
+      }
+    ]
   }
   </script>
 </head>
@@ -191,7 +247,7 @@
             </div>
             <div class="product__body">
               <div class="product__meta"><span>Торты</span><span>1,2 кг</span></div>
-              <h3>Медовик</h3>
+              <h3><button class="product__title" type="button" data-open-product>Медовик</button></h3>
               <p>Тонкие коржи, крем на сметане и обжаренный грецкий орех.</p>
               <div class="product__bottom">
                 <span class="product__price">1 500 ₽</span>
@@ -209,7 +265,7 @@
             </div>
             <div class="product__body">
               <div class="product__meta"><span>Торты</span><span>1,4 кг</span></div>
-              <h3>Чизкейк «Сан-Себастьян»</h3>
+              <h3><button class="product__title" type="button" data-open-product>Чизкейк «Сан-Себастьян»</button></h3>
               <p>Нежный сливочный вкус и карамельная корочка. Подаём с ягодами.</p>
               <div class="product__bottom">
                 <span class="product__price">1 500 ₽</span>
@@ -227,7 +283,7 @@
             </div>
             <div class="product__body">
               <div class="product__meta"><span>Торты</span><span>1,2 кг</span></div>
-              <h3>Шоколадный чизкейк</h3>
+              <h3><button class="product__title" type="button" data-open-product>Шоколадный чизкейк</button></h3>
               <p>Шоколадный бисквит, сливочный чизкейк и мраморная глазурь.</p>
               <div class="product__bottom">
                 <span class="product__price">1 700 ₽</span>
@@ -246,7 +302,7 @@
             </div>
             <div class="product__body">
               <div class="product__meta"><span>Торты</span><span>1,2 кг</span></div>
-              <h3>Ягодный торт</h3>
+              <h3><button class="product__title" type="button" data-open-product>Ягодный торт</button></h3>
               <p>Ванильный бисквит, сливочный крем, свежие ягоды и шоколадный дрип.</p>
               <div class="product__bottom">
                 <span class="product__price">2 100 ₽</span>
@@ -264,7 +320,7 @@
             </div>
             <div class="product__body">
               <div class="product__meta"><span>Торты</span><span>1,2 кг</span></div>
-              <h3>Три шоколада</h3>
+              <h3><button class="product__title" type="button" data-open-product>Три шоколада</button></h3>
               <p>Три слоя мусса: молочный, тёмный и белый шоколад.</p>
               <div class="product__bottom">
                 <span class="product__price">1 900 ₽</span>
@@ -282,7 +338,7 @@
             </div>
             <div class="product__body">
               <div class="product__meta"><span>Десерты</span><span>6 шт</span></div>
-              <h3>Профитроли с вишней</h3>
+              <h3><button class="product__title" type="button" data-open-product>Профитроли с вишней</button></h3>
               <p>Заварные профитроли, сливочный крем и вишнёвый конфитюр.</p>
               <div class="product__bottom">
                 <span class="product__price">350 ₽</span>
@@ -300,7 +356,7 @@
             </div>
             <div class="product__body">
               <div class="product__meta"><span>Десерты</span><span>1 шт</span></div>
-              <h3>Трубочки с карамелью</h3>
+              <h3><button class="product__title" type="button" data-open-product>Трубочки с карамелью</button></h3>
               <p>Хрустящее вафельное тесто и варёная сгущёнка.</p>
               <div class="product__bottom">
                 <span class="product__price">120 ₽</span>
@@ -318,7 +374,7 @@
             </div>
             <div class="product__body">
               <div class="product__meta"><span>Десерты</span><span>1 шт</span></div>
-              <h3>Пончики</h3>
+              <h3><button class="product__title" type="button" data-open-product>Пончики</button></h3>
               <p>Пышные пончики с глазурью и посыпкой. Ассорти вкусов.</p>
               <div class="product__bottom">
                 <span class="product__price">80 ₽</span>
@@ -336,7 +392,7 @@
             </div>
             <div class="product__body">
               <div class="product__meta"><span>Выпечка</span><span>1 шт</span></div>
-              <h3>Круассан с шоколадом</h3>
+              <h3><button class="product__title" type="button" data-open-product>Круассан с шоколадом</button></h3>
               <p>Слоёное тесто и шоколадная начинка. Свежий каждое утро.</p>
               <div class="product__bottom">
                 <span class="product__price">120 ₽</span>
@@ -731,6 +787,36 @@
       </div>
     </div>
   </aside>
+
+  <dialog class="product-modal" id="productModal" aria-labelledby="productModalTitle">
+    <button class="icon-button product-modal__close" type="button" data-close-product aria-label="Закрыть карточку товара">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" stroke="currentColor" stroke-width="1.6"/></svg>
+    </button>
+    <div class="product-modal__grid">
+      <div class="product-modal__media">
+        <img src="assets/img/product-medovik.jpg" alt="" width="800" height="800" data-modal-image>
+      </div>
+      <div class="product-modal__body">
+        <p class="product-modal__meta"><span data-modal-category>Торты</span><span data-modal-unit>1,2 кг</span></p>
+        <h2 id="productModalTitle" data-modal-title>Медовик</h2>
+        <p class="product-modal__desc" data-modal-description>Тонкие коржи, крем на сметане и обжаренный грецкий орех.</p>
+        <div class="product-modal__price-row">
+          <strong data-modal-price>1 500 ₽</strong>
+          <span data-modal-price-note>за 1,2 кг</span>
+        </div>
+        <div class="product-modal__controls">
+          <div class="qty qty--large" aria-label="Количество">
+            <button type="button" data-modal-qty="-1" aria-label="Уменьшить количество">−</button>
+            <span data-modal-qty-value aria-live="polite">1</span>
+            <button type="button" data-modal-qty="1" aria-label="Увеличить количество">+</button>
+          </div>
+          <button class="button button--primary" type="button" data-modal-add>В корзину</button>
+        </div>
+        <a class="product-modal__wa" data-modal-wa href="https://wa.me/79188378048" target="_blank" rel="noopener noreferrer">Заказать в WhatsApp <span aria-hidden="true">↗</span></a>
+        <p class="product-modal__note">Состав, наличие и сроки уточним при подтверждении заказа.</p>
+      </div>
+    </div>
+  </dialog>
 
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 

@@ -16,6 +16,8 @@
     cart: loadCart(),
     activeFilter: "all",
     lastFocused: null,
+    modalProduct: null,
+    modalQty: 1,
   };
 
   const els = {
@@ -38,6 +40,17 @@
     toast: $("#toast"),
     checkoutForm: $("#checkoutForm"),
     customForm: $("#customForm"),
+    productModal: $("#productModal"),
+    modalImage: $("[data-modal-image]"),
+    modalCategory: $("[data-modal-category]"),
+    modalUnit: $("[data-modal-unit]"),
+    modalTitle: $("[data-modal-title]"),
+    modalDescription: $("[data-modal-description]"),
+    modalPrice: $("[data-modal-price]"),
+    modalPriceNote: $("[data-modal-price-note]"),
+    modalQtyValue: $("[data-modal-qty-value]"),
+    modalWa: $("[data-modal-wa]"),
+    modalAdd: $("[data-modal-add]"),
   };
 
   /* ---------- Utilities ---------- */
@@ -248,16 +261,17 @@
     if (els.cartTotal) els.cartTotal.textContent = formatPrice(total);
   }
 
-  function addToCart(product) {
+  function addToCart(product, qty = 1) {
+    const amount = Math.min(99, Math.max(1, Number(qty) || 1));
     const existing = state.cart.find((item) => item.id === product.id);
     if (existing) {
-      existing.qty = Math.min(99, existing.qty + 1);
+      existing.qty = Math.min(99, existing.qty + amount);
     } else {
-      state.cart.push({ ...product, qty: 1 });
+      state.cart.push({ ...product, qty: amount });
     }
     saveCart();
     renderCart({ bump: true });
-    showToast(`«${product.name}» — в корзине`);
+    showToast(amount > 1 ? `«${product.name}» × ${amount} — в корзине` : `«${product.name}» — в корзине`);
   }
 
   function changeQuantity(id, delta) {
@@ -290,6 +304,20 @@
         unit: card.dataset.unit || "",
         image: card.dataset.image || "",
       });
+      return;
+    }
+
+    const titleButton = event.target.closest("[data-open-product]");
+    if (titleButton) {
+      const card = titleButton.closest("[data-id]");
+      if (card) openProduct(card);
+      return;
+    }
+
+    const media = event.target.closest(".product__media");
+    if (media && !event.target.closest(".js-add")) {
+      const card = media.closest("[data-id]");
+      if (card) openProduct(card);
       return;
     }
 
@@ -391,6 +419,100 @@
   });
 
   renderCart();
+
+  /* ---------- Product quick view ---------- */
+
+  function updateModalQty() {
+    if (els.modalQtyValue) els.modalQtyValue.textContent = String(state.modalQty);
+    $$("[data-modal-qty]").forEach((button) => {
+      const direction = Number(button.dataset.modalQty);
+      button.disabled = (direction < 0 && state.modalQty <= 1) || (direction > 0 && state.modalQty >= 99);
+    });
+    if (!state.modalProduct) return;
+    const text = `Здравствуйте! Хочу заказать «${state.modalProduct.name}» — ${state.modalQty} × ${formatPrice(
+      state.modalProduct.price
+    )}.`;
+    if (els.modalWa) els.modalWa.href = whatsappURL(text);
+  }
+
+  function openProduct(card) {
+    if (!els.productModal || typeof els.productModal.showModal !== "function") return;
+    const price = Number(card.dataset.price);
+    if (!card.dataset.name || !Number.isFinite(price)) return;
+
+    state.modalProduct = {
+      id: card.dataset.id,
+      name: card.dataset.name,
+      price,
+      unit: card.dataset.unit || "",
+      image: card.dataset.image || "",
+    };
+    state.modalQty = 1;
+
+    if (els.modalImage) {
+      els.modalImage.src = state.modalProduct.image;
+      els.modalImage.alt = state.modalProduct.name;
+    }
+    if (els.modalCategory) {
+      els.modalCategory.textContent = $(".product__meta span", card)?.textContent.trim() || "";
+    }
+    if (els.modalUnit) els.modalUnit.textContent = state.modalProduct.unit;
+    if (els.modalTitle) els.modalTitle.textContent = state.modalProduct.name;
+    if (els.modalDescription) {
+      els.modalDescription.textContent = $(".product__body > p", card)?.textContent.trim() || "";
+    }
+    if (els.modalPrice) els.modalPrice.textContent = formatPrice(state.modalProduct.price);
+    if (els.modalPriceNote) {
+      els.modalPriceNote.textContent = state.modalProduct.unit
+        ? `за ${state.modalProduct.unit}`
+        : "за порцию";
+    }
+
+    updateModalQty();
+    if (!els.productModal.open) els.productModal.showModal();
+    els.body.classList.add("modal-open");
+    lockBody();
+  }
+
+  function closeProduct() {
+    if (!els.productModal?.open) return;
+    els.productModal.close();
+    els.body.classList.remove("modal-open");
+    unlockBody();
+    state.modalProduct = null;
+  }
+
+  if (els.productModal) {
+    $$("[data-close-product]").forEach((button) => {
+      button.addEventListener("click", closeProduct);
+    });
+
+    els.productModal.addEventListener("click", (event) => {
+      if (event.target === els.productModal) closeProduct();
+    });
+
+    els.productModal.addEventListener("close", () => {
+      els.body.classList.remove("modal-open");
+      unlockBody();
+      state.modalProduct = null;
+    });
+
+    $$("[data-modal-qty]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const next = state.modalQty + Number(button.dataset.modalQty);
+        state.modalQty = Math.min(99, Math.max(1, next));
+        updateModalQty();
+      });
+    });
+
+    if (els.modalAdd) {
+      els.modalAdd.addEventListener("click", () => {
+        if (!state.modalProduct) return;
+        addToCart(state.modalProduct, state.modalQty);
+        closeProduct();
+      });
+    }
+  }
 
   /* ---------- Catalog filters ---------- */
 
