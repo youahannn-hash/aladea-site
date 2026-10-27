@@ -16,7 +16,7 @@
 - отправка готового заказа в WhatsApp (без бэкенда);
 - страницы `privacy.html` и `404.html`;
 - SEO-разметка `Bakery`, Open Graph, favicon, web manifest;
-- GitHub Actions для публикации на GitHub Pages.
+- готов к публикации на GitHub Pages без сборки.
 
 Стек — чистые HTML, CSS и JavaScript. Сборка не нужна, сайт можно открыть как статические файлы.
 
@@ -50,7 +50,7 @@ npx serve .
 │   ├── css/styles.css
 │   ├── js/main.js
 │   └── img/                   # изображения и иконки
-└── .github/workflows/pages.yml
+└── .nojekyll
 ```
 
 ## Как менять контент
@@ -116,11 +116,13 @@ npx serve .
 
 ## Публикация на GitHub Pages
 
+Сайт статический, поэтому сборка не нужна.
+
 1. Создайте репозиторий и запушьте ветку `main`.
 2. Откройте **Settings → Pages**.
-3. В **Build and deployment → Source** выберите **GitHub Actions**.
-4. После пуша workflow `Deploy to GitHub Pages` соберёт и опубликует сайт.
-5. Адрес будет вида `https://<username>.github.io/<repo>/`.
+3. В **Build and deployment → Source** выберите **Deploy from a branch**.
+4. Укажите ветку **main** и папку **/ (root)**, сохраните.
+5. Через минуту сайт будет доступен по адресу `https://<username>.github.io/<repo>/`.
 
 Если сайт открывается по адресу проекта (`/repo/`), проверьте:
 
@@ -128,7 +130,7 @@ npx serve .
 - `start_url` и иконки в `site.webmanifest`;
 - `sitemap.xml` и `robots.txt`.
 
-Для своего домена `aladea.ru` добавьте его в **Settings → Pages → Custom domain** и настройте DNS у регистратора. После подключения домена обновите `og:image` и JSON-LD на финальный URL.
+Для своего домена `aladea.ru` добавьте его в **Settings → Pages → Custom domain** и настройте DNS у регистратора. После подключения домена обновите `og:image` и JSON-LD на финальный URL. Файл `CNAME` создавать вручную не нужно, GitHub добавит его сам.
 
 ## Что проверить перед запуском
 
@@ -140,7 +142,7 @@ npx serve .
 - [ ] Согласовать публикацию отзыва гостя с ДимПоиска или заменить его своим.
 - [ ] Проверить сайт на телефоне, планшете и в Chrome/Safari.
 - [ ] Подключить домен и обновить SEO-URL.
-- [ ] Проверить, что GitHub Pages включён в режиме GitHub Actions.
+- [ ] Проверить, что GitHub Pages включён и сайт открывается по публичному адресу.
 
 ## Доступность и производительность
 
