@@ -4,7 +4,9 @@
 
 **Адрес:** Владикавказ, ул. Кирова, 53  
 **Телефон / WhatsApp:** 8 (918) 837-80-48  
-**Домен для SEO:** `https://aladea.ru/`
+**Сайт:** https://youahannn-hash.github.io/aladea-site/  
+**Репозиторий:** https://github.com/youahannn-hash/aladea-site  
+**Планируемый домен:** `aladea.ru`
 
 ## Что внутри
 
@@ -116,21 +118,16 @@ npx serve .
 
 ## Публикация на GitHub Pages
 
-Сайт статический, поэтому сборка не нужна.
+Сайт статический, поэтому сборка не нужна. Репозиторий уже создан, Pages включён.
 
-1. Создайте репозиторий и запушьте ветку `main`.
-2. Откройте **Settings → Pages**.
-3. В **Build and deployment → Source** выберите **Deploy from a branch**.
-4. Укажите ветку **main** и папку **/ (root)**, сохраните.
-5. Через минуту сайт будет доступен по адресу `https://<username>.github.io/<repo>/`.
+1. Откройте **Settings → Pages**.
+2. В **Build and deployment → Source** выберите **Deploy from a branch**.
+3. Укажите ветку **main** и папку **/ (root)**, сохраните.
+4. Через минуту сайт обновится по адресу `https://youahannn-hash.github.io/aladea-site/`.
 
-Если сайт открывается по адресу проекта (`/repo/`), проверьте:
+Сейчас абсолютные ссылки в `index.html` (`og:image`, `og:url`, JSON-LD), `sitemap.xml` и `robots.txt` указывают на технический адрес GitHub Pages. После подключения домена замените их на `https://aladea.ru/...`.
 
-- в `index.html` абсолютные ссылки `https://aladea.ru/...` в Open Graph и JSON-LD;
-- `start_url` и иконки в `site.webmanifest`;
-- `sitemap.xml` и `robots.txt`.
-
-Для своего домена `aladea.ru` добавьте его в **Settings → Pages → Custom domain** и настройте DNS у регистратора. После подключения домена обновите `og:image` и JSON-LD на финальный URL. Файл `CNAME` создавать вручную не нужно, GitHub добавит его сам.
+Для своего домена `aladea.ru` добавьте его в **Settings → Pages → Custom domain** и настройте DNS у регистратора. После подключения домена обновите `og:image`, JSON-LD, `sitemap.xml` и `robots.txt` на финальный URL. Файл `CNAME` создавать вручную не нужно, GitHub добавит его сам.
 
 ## Что проверить перед запуском
 

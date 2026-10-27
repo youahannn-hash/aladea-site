@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://aladea.ru/sitemap.xml
+Sitemap: https://youahannn-hash.github.io/aladea-site/sitemap.xml

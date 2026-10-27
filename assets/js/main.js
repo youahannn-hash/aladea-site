@@ -721,7 +721,7 @@
       if (method === "Доставка" && address) lines.push(`Адрес: ${address}`);
       if (date) lines.push(`Дата: ${formatDate(date)}`);
       if (comment) lines.push(`Комментарий: ${comment}`);
-      lines.push("", "Отправлено с сайта aladea.ru");
+      lines.push("", "Отправлено с сайта АлаДея");
 
       const url = whatsappURL(lines.join("\n"));
       const opened = openWhatsApp(url);
@@ -770,7 +770,7 @@
       if (date) lines.push(`Дата праздника: ${formatDate(date)}`);
       if (occasion) lines.push(`Повод: ${occasion}`);
       if (comment) lines.push(`Пожелания: ${comment}`);
-      lines.push("", "Отправлено с сайта aladea.ru");
+      lines.push("", "Отправлено с сайта АлаДея");
 
       const url = whatsappURL(lines.join("\n"));
       const opened = openWhatsApp(url);
