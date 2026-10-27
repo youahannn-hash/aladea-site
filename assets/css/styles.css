@@ -2817,6 +2817,12 @@ body.cart-open .cart-drawer {
   }
 }
 
+@media (max-width: 900px) {
+  .product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 @media (max-width: 760px) {
   .section {
     padding-block: 70px;
@@ -2904,7 +2910,6 @@ body.cart-open .cart-drawer {
   }
 
   .product-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 30px 14px;
   }
 
@@ -3218,6 +3223,10 @@ body.cart-open .cart-drawer {
   .hero__photo {
     height: 112vw;
     max-height: 520px;
+  }
+
+  .hero__photo figcaption {
+    display: none;
   }
 
   .product-grid {
