@@ -232,8 +232,9 @@
             <button class="filter" type="button" data-filter="cakes" aria-pressed="false">Торты</button>
             <button class="filter" type="button" data-filter="desserts" aria-pressed="false">Десерты</button>
             <button class="filter" type="button" data-filter="pastry" aria-pressed="false">Выпечка</button>
+            <button class="filter" type="button" data-filter="bouquets" aria-pressed="false">Букеты</button>
           </div>
-          <p class="catalog__count" id="catalogCount">9 позиций</p>
+          <p class="catalog__count" id="catalogCount">12 позиций</p>
         </div>
 
         <div class="product-grid" id="productGrid">
@@ -397,6 +398,51 @@
               <div class="product__bottom">
                 <span class="product__price">120 ₽</span>
                 <button class="product__add js-add" type="button">В корзину</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product product--request" data-category="bouquets" data-id="bouquet" data-name="Шоколадные букеты" data-unit="по запросу" data-image="assets/img/placeholder-bouquet.jpg" data-request="true">
+            <div class="product__media">
+              <img src="assets/img/placeholder-bouquet.jpg" alt="Шоколадные букеты — фото скоро" width="800" height="800" loading="lazy">
+            </div>
+            <div class="product__body">
+              <div class="product__meta"><span>Букеты</span><span>по запросу</span></div>
+              <h3><button class="product__title" type="button" data-open-product>Шоколадные букеты</button></h3>
+              <p>Авторские композиции из шоколада. Соберём к празднику и упакуем.</p>
+              <div class="product__bottom">
+                <span class="product__price product__price--request">Цена по запросу</span>
+                <button class="product__add" type="button" data-open-product aria-label="Уточнить цену: Шоколадные букеты">Уточнить</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product product--request" data-category="desserts" data-id="eclairs" data-name="Эклеры" data-unit="по запросу" data-image="assets/img/placeholder-eclairs.jpg" data-request="true">
+            <div class="product__media">
+              <img src="assets/img/placeholder-eclairs.jpg" alt="Эклеры — фото скоро" width="800" height="800" loading="lazy">
+            </div>
+            <div class="product__body">
+              <div class="product__meta"><span>Десерты</span><span>по запросу</span></div>
+              <h3><button class="product__title" type="button" data-open-product>Эклеры</button></h3>
+              <p>Классические эклеры с заварным кремом. Начинки и декор уточним.</p>
+              <div class="product__bottom">
+                <span class="product__price product__price--request">Цена по запросу</span>
+                <button class="product__add" type="button" data-open-product aria-label="Уточнить цену: Эклеры">Уточнить</button>
+              </div>
+            </div>
+          </article>
+
+          <article class="product product--request" data-category="cakes" data-id="napoleon" data-name="Наполеон" data-unit="по запросу" data-image="assets/img/placeholder-napoleon.jpg" data-request="true">
+            <div class="product__media">
+              <img src="assets/img/placeholder-napoleon.jpg" alt="Наполеон — фото скоро" width="800" height="800" loading="lazy">
+            </div>
+            <div class="product__body">
+              <div class="product__meta"><span>Торты</span><span>по запросу</span></div>
+              <h3><button class="product__title" type="button" data-open-product>Наполеон</button></h3>
+              <p>Слоёный торт с заварным кремом. Вес и оформление подберём под заказ.</p>
+              <div class="product__bottom">
+                <span class="product__price product__price--request">Цена по запросу</span>
+                <button class="product__add" type="button" data-open-product aria-label="Уточнить цену: Наполеон">Уточнить</button>
               </div>
             </div>
           </article>
@@ -804,7 +850,7 @@
           <strong data-modal-price>1 500 ₽</strong>
           <span data-modal-price-note>за 1,2 кг</span>
         </div>
-        <div class="product-modal__controls">
+        <div class="product-modal__controls" data-modal-controls>
           <div class="qty qty--large" aria-label="Количество">
             <button type="button" data-modal-qty="-1" aria-label="Уменьшить количество">−</button>
             <span data-modal-qty-value aria-live="polite">1</span>
@@ -812,7 +858,7 @@
           </div>
           <button class="button button--primary" type="button" data-modal-add>В корзину</button>
         </div>
-        <a class="product-modal__wa" data-modal-wa href="https://wa.me/79188378048" target="_blank" rel="noopener noreferrer">Заказать в WhatsApp <span aria-hidden="true">↗</span></a>
+        <a class="product-modal__wa" data-modal-wa href="https://wa.me/79188378048" target="_blank" rel="noopener noreferrer"><span data-modal-wa-label>Заказать в WhatsApp</span> <span aria-hidden="true">↗</span></a>
         <p class="product-modal__note">Состав, наличие и сроки уточним при подтверждении заказа.</p>
       </div>
     </div>

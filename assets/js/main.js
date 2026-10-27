@@ -50,6 +50,8 @@
     modalPriceNote: $("[data-modal-price-note]"),
     modalQtyValue: $("[data-modal-qty-value]"),
     modalWa: $("[data-modal-wa]"),
+    modalWaLabel: $("[data-modal-wa-label]"),
+    modalControls: $("[data-modal-controls]"),
     modalAdd: $("[data-modal-add]"),
   };
 
@@ -262,6 +264,7 @@
   }
 
   function addToCart(product, qty = 1) {
+    if (!product || product.request || !Number.isFinite(Number(product.price))) return;
     const amount = Math.min(99, Math.max(1, Number(qty) || 1));
     const existing = state.cart.find((item) => item.id === product.id);
     if (existing) {
@@ -429,6 +432,14 @@
       button.disabled = (direction < 0 && state.modalQty <= 1) || (direction > 0 && state.modalQty >= 99);
     });
     if (!state.modalProduct) return;
+    if (state.modalProduct.request) {
+      if (els.modalWa) {
+        els.modalWa.href = whatsappURL(
+          `Здравствуйте! Интересует «${state.modalProduct.name}». Подскажите, пожалуйста, цену и наличие.`
+        );
+      }
+      return;
+    }
     const text = `Здравствуйте! Хочу заказать «${state.modalProduct.name}» — ${state.modalQty} × ${formatPrice(
       state.modalProduct.price
     )}.`;
@@ -437,8 +448,9 @@
 
   function openProduct(card) {
     if (!els.productModal || typeof els.productModal.showModal !== "function") return;
-    const price = Number(card.dataset.price);
-    if (!card.dataset.name || !Number.isFinite(price)) return;
+    const isRequest = card.dataset.request === "true";
+    const price = isRequest ? null : Number(card.dataset.price);
+    if (!card.dataset.name || (!isRequest && !Number.isFinite(price))) return;
 
     state.modalProduct = {
       id: card.dataset.id,
@@ -446,6 +458,7 @@
       price,
       unit: card.dataset.unit || "",
       image: card.dataset.image || "",
+      request: isRequest,
     };
     state.modalQty = 1;
 
@@ -461,11 +474,20 @@
     if (els.modalDescription) {
       els.modalDescription.textContent = $(".product__body > p", card)?.textContent.trim() || "";
     }
-    if (els.modalPrice) els.modalPrice.textContent = formatPrice(state.modalProduct.price);
+    if (els.modalPrice) {
+      els.modalPrice.textContent = isRequest ? "Цена по запросу" : formatPrice(state.modalProduct.price);
+      els.modalPrice.classList.toggle("is-request", isRequest);
+    }
     if (els.modalPriceNote) {
-      els.modalPriceNote.textContent = state.modalProduct.unit
+      els.modalPriceNote.textContent = isRequest
+        ? "уточним при подтверждении"
+        : state.modalProduct.unit
         ? `за ${state.modalProduct.unit}`
         : "за порцию";
+    }
+    if (els.modalControls) els.modalControls.hidden = isRequest;
+    if (els.modalWaLabel) {
+      els.modalWaLabel.textContent = isRequest ? "Уточнить в WhatsApp" : "Заказать в WhatsApp";
     }
 
     updateModalQty();
@@ -507,7 +529,7 @@
 
     if (els.modalAdd) {
       els.modalAdd.addEventListener("click", () => {
-        if (!state.modalProduct) return;
+        if (!state.modalProduct || state.modalProduct.request) return;
         addToCart(state.modalProduct, state.modalQty);
         closeProduct();
       });
