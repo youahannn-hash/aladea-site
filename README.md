@@ -150,8 +150,24 @@ npx serve .
 - есть skip-link, aria-атрибуты, фокус-ловушки в корзине и меню, `prefers-reduced-motion`;
 - изображения с `loading="lazy"`, кроме hero;
 - нет внешних JS-библиотек;
-- шрифты Google Fonts загружаются с `display=swap`.
+- шрифты Cormorant Garamond и Manrope хостятся локально, `font-display: swap`.
+
+## Безопасность
+
+- CSP через `<meta http-equiv="Content-Security-Policy">`: только свои скрипты, стили, шрифты и изображения; внешние фреймы и объекты запрещены;
+- `Referrer-Policy: strict-origin-when-cross-origin`;
+- frame-busting в `assets/js/boot.js` — защита от встраивания сайта в чужой iframe;
+- данные корзины из `localStorage` проверяются по типам, ограничиваются по цене/количеству, путь изображения допускается только из `assets/img/`;
+- пользовательские значения в корзине экранируются, текст успешной заявки собирается через DOM, а не `innerHTML`;
+- поля форм ограничены по длине (`maxlength`);
+- внешние ссылки открываются с `rel="noopener noreferrer"`;
+- шрифты self-hosted, без передачи IP посетителя в Google Fonts;
+- секретов, `.env`, ключей и приватных файлов в репозитории нет.
+
+Ограничение GitHub Pages: платформа не позволяет задавать произвольные HTTP-заголовки (`X-Frame-Options`, `Content-Security-Policy`, `Permissions-Policy`). CSP и referrer заданы мета-тегами; frame-busting компенсирует отсутствие `X-Frame-Options`. На полноценном сервере (этап CMS) эти заголовки должны выставляться сервером — см. `server/` после реализации.
 
 ## Лицензии
 
 Код можно использовать для этого проекта. Бренд, логотип, тексты и фотографии кондитерской принадлежат их правообладателям. Фотографии предоставлены заказчиком.
+
+Шрифты Cormorant Garamond и Manrope распространяются по SIL Open Font License 1.1; текст лицензии — в `assets/fonts/OFL.txt`.

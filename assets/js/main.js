@@ -12,6 +12,17 @@
   const STORAGE_KEY = "aladea-cart-v1";
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+  const SAFE_IMAGE = /^assets\/img\/[A-Za-z0-9][A-Za-z0-9._-]*\.(?:jpe?g|png|webp|svg)$/i;
+
+  function safeImagePath(value) {
+    const path = typeof value === "string" ? value : "";
+    return SAFE_IMAGE.test(path) ? path : "assets/img/og-cover.jpg";
+  }
+
+  function cleanText(value, maxLength) {
+    return typeof value === "string" ? value.trim().slice(0, maxLength) : "";
+  }
+
   const state = {
     cart: loadCart(),
     activeFilter: "all",
@@ -176,11 +187,11 @@
             Number.isFinite(Number(item.qty))
         )
         .map((item) => ({
-          id: item.id,
-          name: item.name,
-          price: Number(item.price),
-          unit: typeof item.unit === "string" ? item.unit : "",
-          image: typeof item.image === "string" ? item.image : "",
+          id: cleanText(item.id, 60).replace(/[^A-Za-z0-9_-]/g, "") || "item",
+          name: cleanText(item.name, 100) || "Товар",
+          price: Math.max(0, Math.min(1000000, Number(item.price))),
+          unit: cleanText(item.unit, 30),
+          image: safeImagePath(item.image),
           qty: Math.min(99, Math.max(1, Math.round(Number(item.qty)))),
         }));
     } catch (error) {
@@ -242,7 +253,7 @@
       .map(
         (item) => `
         <article class="cart-item">
-          <img class="cart-item__image" src="${escapeHTML(item.image)}" alt="" width="72" height="82" loading="lazy">
+          <img class="cart-item__image" src="${escapeHTML(safeImagePath(item.image))}" alt="" width="72" height="82" loading="lazy">
           <div class="cart-item__info">
             <h3>${escapeHTML(item.name)}</h3>
             <span class="cart-item__unit">${escapeHTML(item.unit)}</span>
@@ -264,13 +275,21 @@
   }
 
   function addToCart(product, qty = 1) {
-    if (!product || product.request || !Number.isFinite(Number(product.price))) return;
+    const price = Number(product?.price);
+    if (!product || product.request || !Number.isFinite(price) || price < 0 || price > 1000000) return;
     const amount = Math.min(99, Math.max(1, Number(qty) || 1));
-    const existing = state.cart.find((item) => item.id === product.id);
+    const safeProduct = {
+      id: cleanText(product.id, 60).replace(/[^A-Za-z0-9_-]/g, "") || "item",
+      name: cleanText(product.name, 100) || "Товар",
+      price,
+      unit: cleanText(product.unit, 30),
+      image: safeImagePath(product.image),
+    };
+    const existing = state.cart.find((item) => item.id === safeProduct.id);
     if (existing) {
       existing.qty = Math.min(99, existing.qty + amount);
     } else {
-      state.cart.push({ ...product, qty: amount });
+      state.cart.push({ ...safeProduct, qty: amount });
     }
     saveCart();
     renderCart({ bump: true });
@@ -457,7 +476,7 @@
       name: card.dataset.name,
       price,
       unit: card.dataset.unit || "",
-      image: card.dataset.image || "",
+      image: safeImagePath(card.dataset.image),
       request: isRequest,
     };
     state.modalQty = 1;
@@ -779,7 +798,7 @@
   }
 
   function openWhatsApp(url) {
-    const opened = window.open(url, "_blank", "noopener");
+    const opened = window.open(url, "_blank", "noopener,noreferrer");
     return Boolean(opened);
   }
 
@@ -787,9 +806,13 @@
     const success = form.querySelector("[data-success]");
     if (!success) return;
     success.hidden = false;
-    success.innerHTML = `${escapeHTML(text)} <a href="${escapeHTML(
-      url
-    )}" target="_blank" rel="noopener noreferrer">Открыть WhatsApp ещё раз ↗</a>`;
+    success.replaceChildren(document.createTextNode(text + " "));
+    const link = document.createElement("a");
+    link.href = url;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.textContent = "Открыть WhatsApp ещё раз ↗";
+    success.append(link);
     if (!prefersReducedMotion) {
       success.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
