@@ -25,7 +25,7 @@
 - отправка готового заказа в WhatsApp (без бэкенда);
 - **CMS `/admin`**: серверная авторизация, товары, категории, загрузка и оптимизация фото, публикация/наличие/акции, поиск, фильтры, сортировка;
 - публичная витрина получает товары из БД на Node-сервере; статический GitHub Pages остаётся fallback-версией;
-- страницы `privacy.html` и `404.html`;
+- страницы `docs/privacy.html` и `docs/404.html`;
 - SEO-разметка `Bakery` и `FAQPage`, Open Graph, canonical, favicon, web manifest.
 
 Стек публичной части — HTML, CSS и vanilla JavaScript. CMS — Node.js + Express + SQLite (`node:sqlite`) + `sharp`/`multer`. Сборка фронтенда не нужна.
@@ -151,7 +151,7 @@ GitHub Pages публикует **только статическую витри
 
 1. Откройте **Settings → Pages**.
 2. В **Build and deployment → Source** выберите **Deploy from a branch**.
-3. Укажите ветку **main** и папку **/ (root)**, сохраните.
+3. Укажите ветку **main** и папку **/docs**, сохраните. Публикуется только `docs/`; `server/`, `data/`, `documentation/` и `package.json` не попадают на Pages.
 4. Через минуту сайт обновится по адресу `https://youahannn-hash.github.io/aladea-site/`.
 
 Сейчас абсолютные ссылки в `docs/index.html` (`og:image`, `og:url`, JSON-LD), `sitemap.xml` и `robots.txt` указывают на технический адрес GitHub Pages. После подключения домена замените их на `https://aladea.ru/...`.
