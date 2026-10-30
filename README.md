@@ -10,9 +10,9 @@
 
 **Планируемый домен:** `aladea.ru`
 
-**CMS:** `/admin` на Node-сервере, см. [docs/CMS.md](docs/CMS.md)
+**CMS:** `/admin` на Node-сервере, см. [documentation/CMS.md](documentation/CMS.md)
 
-**Аудит безопасности:** [docs/SECURITY.md](docs/SECURITY.md)
+**Аудит безопасности:** [documentation/SECURITY.md](documentation/SECURITY.md)
 
 ## Что внутри
 
@@ -35,7 +35,7 @@
 ### Публичная версия без CMS
 
 ```bash
-python -m http.server 4173
+python -m http.server 4173 --directory docs
 ```
 
 Откройте `http://127.0.0.1:4173/`.
@@ -63,26 +63,28 @@ npm start
 
 ```
 .
-├── index.html                 # публичная витрина + fallback-карточки
-├── privacy.html               # политика конфиденциальности
-├── 404.html                   # страница ошибки
-├── assets/                    # стили, JS, шрифты, фото
+├── docs/                      # ЕДИНСТВЕННЫЙ источник для GitHub Pages
+│   ├── index.html             # публичная витрина + fallback-карточки
+│   ├── privacy.html
+│   ├── 404.html
+│   ├── robots.txt / sitemap.xml
+│   └── assets/                # стили, JS, шрифты, фото
 ├── server/                    # Node CMS: Express, SQLite, auth, uploads
 │   ├── sql/schema.postgres.sql
 │   ├── admin.css
 │   ├── admin.js
 │   └── views.mjs
-├── docs/CMS.md                # архитектура, стоимость, миграция
+├── documentation/             # CMS.md, SECURITY.md (не публикуется)
 ├── data/                      # БД и загрузки (gitignored)
 ├── package.json
-└── .nojekyll
+└── docs/.nojekyll
 ```
 
 ## Как менять контент
 
 ### Товары
 
-Основной способ — `/admin` на Node-сервере: изменения сохраняются в SQLite и сразу попадают на витрину. Статические карточки в `index.html` — fallback для GitHub Pages, если сервер не используется. У каждой fallback-карточки есть data-атрибуты:
+Основной способ — `/admin` на Node-сервере: изменения сохраняются в SQLite и сразу попадают на витрину. Статические карточки в `docs/index.html` — fallback для GitHub Pages, если сервер не используется. У каждой fallback-карточки есть data-атрибуты:
 
 ```html
 <article class="product reveal"
@@ -106,19 +108,19 @@ npm start
 
 Номер встречается в нескольких местах:
 
-1. `WHATSAPP_NUMBER` в `assets/js/main.js` — формат `79188378048`, без `+`;
-2. ссылки `tel:+79188378048` и `wa.me/79188378048` в `index.html`, `privacy.html`, `404.html`;
+1. `WHATSAPP_NUMBER` в `docs/assets/js/main.js` — формат `79188378048`, без `+`;
+2. ссылки `tel:+79188378048` и `wa.me/79188378048` в `docs/index.html`, `docs/privacy.html`, `docs/404.html`;
 3. видимый текст `8 (918) 837-80-48`.
 
 При смене номера замените все вхождения поиском по проекту.
 
 ### Адрес и часы
 
-Адрес и график находятся в `index.html` (контакты, доставка, подвал) и в `privacy.html`. Текущие данные: `Кирова, 53`, `ежедневно 10:00–19:00`. Проверьте их перед публикацией.
+Адрес и график находятся в `docs/index.html` (контакты, доставка, подвал) и `docs/privacy.html`. Текущие данные: `Кирова, 53`, `ежедневно 10:00–19:00`. Проверьте их перед публикацией.
 
 ### Фотографии
 
-Фотографии в `assets/img/` предоставлены заказчиком. Они уже подобраны под фирменную палитру и стоят в hero, каталоге и блоке «О кондитерской».
+Фотографии в `docs/assets/img/` предоставлены заказчиком. Они уже подобраны под фирменную палитру и стоят в hero, каталоге и блоке «О кондитерской».
 
 Для трёх позиций — шоколадных букетов, эклеров и «Наполеона» — пока стоят брендированные заглушки `placeholder-*.jpg` с подписью «Фото скоро». Когда пришлёте фотографии, замените эти файлы, сохранив имена, или пришлите их мне.
 
@@ -139,7 +141,7 @@ npm start
 
 Формы не отправляют данные на сервер. После валидации JS собирает текст заказа и открывает WhatsApp с заполненным сообщением. Пользователь сам нажимает «Отправить» в WhatsApp.
 
-Чтобы подключить почту, CRM или Telegram-бота, замените функцию `openWhatsApp` в `assets/js/main.js` на `fetch` к вашему endpoint.
+Чтобы подключить почту, CRM или Telegram-бота, замените функцию `openWhatsApp` в `docs/assets/js/main.js` на `fetch` к вашему endpoint.
 
 ## Публикация на GitHub Pages
 
@@ -152,7 +154,7 @@ GitHub Pages публикует **только статическую витри
 3. Укажите ветку **main** и папку **/ (root)**, сохраните.
 4. Через минуту сайт обновится по адресу `https://youahannn-hash.github.io/aladea-site/`.
 
-Сейчас абсолютные ссылки в `index.html` (`og:image`, `og:url`, JSON-LD), `sitemap.xml` и `robots.txt` указывают на технический адрес GitHub Pages. После подключения домена замените их на `https://aladea.ru/...`.
+Сейчас абсолютные ссылки в `docs/index.html` (`og:image`, `og:url`, JSON-LD), `sitemap.xml` и `robots.txt` указывают на технический адрес GitHub Pages. После подключения домена замените их на `https://aladea.ru/...`.
 
 Для своего домена `aladea.ru` добавьте его в **Settings → Pages → Custom domain** и настройте DNS у регистратора. После подключения домена обновите `og:image`, JSON-LD, `sitemap.xml` и `robots.txt` на финальный URL. Файл `CNAME` создавать вручную не нужно, GitHub добавит его сам.
 
@@ -180,8 +182,8 @@ GitHub Pages публикует **только статическую витри
 
 - CSP через `<meta http-equiv="Content-Security-Policy">`: только свои скрипты, стили, шрифты и изображения; внешние фреймы и объекты запрещены;
 - `Referrer-Policy: strict-origin-when-cross-origin`;
-- frame-busting в `assets/js/boot.js` — защита от встраивания сайта в чужой iframe;
-- данные корзины из `localStorage` проверяются по типам, ограничиваются по цене/количеству, путь изображения допускается только из `assets/img/`;
+- frame-busting в `docs/assets/js/boot.js` — защита от встраивания сайта в чужой iframe;
+- данные корзины из `localStorage` проверяются по типам, ограничиваются по цене/количеству, путь изображения допускается только из `docs/assets/img/`;
 - пользовательские значения в корзине экранируются, текст успешной заявки собирается через DOM, а не `innerHTML`;
 - поля форм ограничены по длине (`maxlength`);
 - внешние ссылки открываются с `rel="noopener noreferrer"`;
@@ -194,4 +196,4 @@ GitHub Pages публикует **только статическую витри
 
 Код можно использовать для этого проекта. Бренд, логотип, тексты и фотографии кондитерской принадлежат их правообладателям. Фотографии предоставлены заказчиком.
 
-Шрифты Cormorant Garamond и Manrope распространяются по SIL Open Font License 1.1; текст лицензии — в `assets/fonts/OFL.txt`.
+Шрифты Cormorant Garamond и Manrope распространяются по SIL Open Font License 1.1; текст лицензии — в `docs/assets/fonts/OFL.txt`.

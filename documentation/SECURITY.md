@@ -16,13 +16,13 @@
 ## Найдено и исправлено
 
 1. **На GitHub Pages нет CSP, X-Frame-Options, Referrer-Policy.**  
-   Добавлены meta-CSP, `referrer` и frame-busting в `assets/js/boot.js`. На Node-сервере те же политики выставляются HTTP-заголовками, включая `frame-ancestors 'none'` и `X-Frame-Options: DENY`.
+   Добавлены meta-CSP, `referrer` и frame-busting в `docs/assets/js/boot.js`. На Node-сервере те же политики выставляются HTTP-заголовками, включая `frame-ancestors 'none'` и `X-Frame-Options: DENY`.
 
 2. **Данные корзины из `localStorage` попадали в `innerHTML`.**  
    Добавлены проверка типов, ограничение цены/количества, экранирование и whitelist путей изображений. Подставленный `<img onerror=...>` и `javascript:`-путь отображаются как текст/fallback, код не исполняется. Текст success-сообщения теперь собирается через DOM API, а не `innerHTML`.
 
 3. **Внешняя загрузка Google Fonts.**  
-   Шрифты Cormorant Garamond и Manrope скачаны локально (`assets/fonts`, OFL), CSP больше не разрешает сторонние шрифтовые домены, IP посетителя не уходит в Google.
+   Шрифты Cormorant Garamond и Manrope скачаны локально (`docs/assets/fonts`, OFL), CSP больше не разрешает сторонние шрифтовые домены, IP посетителя не уходит в Google.
 
 4. **Не было ограничений длины полей.**  
    Добавлены `maxlength` для имени, телефона, адреса и комментариев.
@@ -31,7 +31,7 @@
    Проверены: используются `rel="noopener noreferrer"`; `window.open` вызывается с `noopener,noreferrer`.
 
 6. **Секреты и служебные файлы.**  
-   В репозитории нет `.env`, ключей, токенов, приватных ключей, SQLite/дампов. Node-сервер не раздаёт `server/`, `data/`, `package.json`, `README.md`, `.env` — проверено HTTP-запросами (404).
+   В репозитории нет `.env`, ключей, токенов, приватных ключей, SQLite/дампов. Node-сервер не раздаёт `server/`, `data/`, `package.json`, `README.md`, `.env` — проверено HTTP-запросами (404). GitHub Pages публикует только `docs/`, поэтому серверный код и документация туда не попадают.
 
 7. **Админка не защищалась бы одним JS.**  
    Реализованы серверные сессии (хеш токена в БД), scrypt-пароли, CSRF для всех POST, rate limit 5 попыток/15 минут, `HttpOnly`/`SameSite=Lax` cookie, `Secure` в production, `noindex` и `Cache-Control: no-store` для `/admin`.
@@ -60,4 +60,5 @@
 - Админ-сценарий: неавторизованный редирект, вход, создание/редактирование/удаление, фото, категории, скрытие товара, CSRF-отказ, logout.
 - Cookie: `HttpOnly; SameSite=Lax; Path=/; Max-Age=43200`.
 - Rate limit: 6-я неудачная попытка возвращает 429.
-- Служебные пути: `/server/index.mjs`, `/.env`, `/package.json`, `/data-test/aladea.sqlite`, `/README.md` → 404.
+- Служебные пути: `/server/index.mjs`, `/.env`, `/package.json`, `/data-test/aladea.sqlite`, `/README.md` → 404 на Node-сервере.
+- GitHub Pages source = `/docs`; `server/`, `documentation/`, `package.json` не публикуются.

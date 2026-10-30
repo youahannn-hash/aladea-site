@@ -54,7 +54,8 @@ const HOST = process.env.HOST || "127.0.0.1";
 const isProduction = process.env.NODE_ENV === "production";
 const secureCookies = isProduction || process.env.COOKIE_SECURE === "1";
 const LOGIN_CSRF_COOKIE = "aladea_login_csrf";
-const ROOT_INDEX = path.join(root, "index.html");
+const PUBLIC_DIR = path.join(root, "docs");
+const ROOT_INDEX = path.join(PUBLIC_DIR, "index.html");
 const PUBLIC_CSP = [
   "default-src 'self'",
   "base-uri 'self'",
@@ -114,7 +115,7 @@ app.use(express.json({ limit: "100kb" }));
 
 app.use(
   "/assets",
-  express.static(path.join(root, "assets"), {
+  express.static(path.join(PUBLIC_DIR, "assets"), {
     dotfiles: "deny",
     fallthrough: true,
     maxAge: "1h",
@@ -147,7 +148,7 @@ app.get("/favicon.ico", (req, res) => res.redirect(301, "/assets/img/favicon.svg
 for (const file of ["robots.txt", "sitemap.xml", "site.webmanifest", "privacy.html", "404.html"]) {
   app.get(`/${file}`, (req, res) => {
     res.setHeader("Cache-Control", "public, max-age=300");
-    res.sendFile(path.join(root, file));
+    res.sendFile(path.join(PUBLIC_DIR, file));
   });
 }
 
@@ -776,7 +777,7 @@ app.use("/admin", (req, res) => {
 /* ---------- Public fallback ---------- */
 
 app.use((req, res) => {
-  res.status(404).type("html").sendFile(path.join(root, "404.html"));
+  res.status(404).type("html").sendFile(path.join(PUBLIC_DIR, "404.html"));
 });
 
 app.use((error, req, res, next) => {
