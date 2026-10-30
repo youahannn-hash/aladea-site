@@ -12,7 +12,7 @@
   const STORAGE_KEY = "aladea-cart-v1";
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  const SAFE_IMAGE = /^assets\/img\/[A-Za-z0-9][A-Za-z0-9._-]*\.(?:jpe?g|png|webp|svg)$/i;
+  const SAFE_IMAGE = /^(?:\/?assets\/img|\/uploads)\/[A-Za-z0-9][A-Za-z0-9._-]*\.(?:jpe?g|png|webp)$/i;
 
   function safeImagePath(value) {
     const path = typeof value === "string" ? value : "";
@@ -64,6 +64,8 @@
     modalWaLabel: $("[data-modal-wa-label]"),
     modalControls: $("[data-modal-controls]"),
     modalAdd: $("[data-modal-add]"),
+    modalNote: $("[data-modal-note]"),
+    modalThumbs: $("[data-modal-thumbs]"),
   };
 
   /* ---------- Utilities ---------- */
@@ -451,7 +453,7 @@
       button.disabled = (direction < 0 && state.modalQty <= 1) || (direction > 0 && state.modalQty >= 99);
     });
     if (!state.modalProduct) return;
-    if (state.modalProduct.request) {
+    if (state.modalProduct.request || !state.modalProduct.inStock) {
       if (els.modalWa) {
         els.modalWa.href = whatsappURL(
           `Здравствуйте! Интересует «${state.modalProduct.name}». Подскажите, пожалуйста, цену и наличие.`
@@ -465,26 +467,62 @@
     if (els.modalWa) els.modalWa.href = whatsappURL(text);
   }
 
+  function renderModalThumbs(urls) {
+    if (!els.modalThumbs) return;
+    els.modalThumbs.replaceChildren();
+    if (urls.length < 2) return;
+    urls.forEach((url, index) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = index === 0 ? "is-active" : "";
+      button.setAttribute("aria-label", `Фото ${index + 1}`);
+      const image = document.createElement("img");
+      image.src = url;
+      image.alt = "";
+      image.width = 46;
+      image.height = 46;
+      image.loading = "lazy";
+      button.append(image);
+      button.addEventListener("click", () => {
+        if (els.modalImage) els.modalImage.src = url;
+        $$("button", els.modalThumbs).forEach((item) => item.classList.remove("is-active"));
+        button.classList.add("is-active");
+      });
+      els.modalThumbs.append(button);
+    });
+  }
+
   function openProduct(card) {
     if (!els.productModal || typeof els.productModal.showModal !== "function") return;
     const isRequest = card.dataset.request === "true";
+    const inStock = card.dataset.stock !== "0";
     const price = isRequest ? null : Number(card.dataset.price);
     if (!card.dataset.name || (!isRequest && !Number.isFinite(price))) return;
+    const gallery = [...new Set(
+      String(card.dataset.gallery || card.dataset.image || "")
+        .split("|")
+        .map(safeImagePath)
+        .filter(Boolean)
+    )];
+    const mainImage = gallery[0] || safeImagePath(card.dataset.image);
 
     state.modalProduct = {
       id: card.dataset.id,
       name: card.dataset.name,
       price,
       unit: card.dataset.unit || "",
-      image: safeImagePath(card.dataset.image),
+      image: mainImage,
       request: isRequest,
+      inStock,
+      gallery,
     };
     state.modalQty = 1;
 
     if (els.modalImage) {
-      els.modalImage.src = state.modalProduct.image;
+      els.modalImage.src = mainImage;
       els.modalImage.alt = state.modalProduct.name;
     }
+    renderModalThumbs(gallery);
     if (els.modalCategory) {
       els.modalCategory.textContent = $(".product__meta span", card)?.textContent.trim() || "";
     }
@@ -504,9 +542,20 @@
         ? `за ${state.modalProduct.unit}`
         : "за порцию";
     }
-    if (els.modalControls) els.modalControls.hidden = isRequest;
+    if (els.modalControls) els.modalControls.hidden = isRequest || !inStock;
     if (els.modalWaLabel) {
-      els.modalWaLabel.textContent = isRequest ? "Уточнить в WhatsApp" : "Заказать в WhatsApp";
+      els.modalWaLabel.textContent = isRequest
+        ? "Уточнить в WhatsApp"
+        : !inStock
+        ? "Уточнить наличие"
+        : "Заказать в WhatsApp";
+    }
+    if (els.modalNote) {
+      els.modalNote.textContent = isRequest
+        ? "Фото, цену и наличие уточним в WhatsApp. Оставьте заявку — ответим."
+        : !inStock
+        ? "Сейчас этой позиции нет в наличии. Уточните поступление в WhatsApp."
+        : "Состав, наличие и сроки уточним при подтверждении заказа.";
     }
 
     updateModalQty();
@@ -548,7 +597,7 @@
 
     if (els.modalAdd) {
       els.modalAdd.addEventListener("click", () => {
-        if (!state.modalProduct || state.modalProduct.request) return;
+        if (!state.modalProduct || state.modalProduct.request || !state.modalProduct.inStock) return;
         addToCart(state.modalProduct, state.modalQty);
         closeProduct();
       });

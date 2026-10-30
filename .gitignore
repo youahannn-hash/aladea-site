@@ -6,3 +6,13 @@ Desktop.ini
 .idea/
 node_modules/
 _site/
+data/
+data-test/
+.env
+.env.*
+!.env.example
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+server.out
+server.err

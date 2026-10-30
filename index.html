@@ -228,16 +228,19 @@
 
         <div class="catalog__bar reveal">
           <div class="filters" role="group" aria-label="Фильтр каталога">
+            <!-- FILTERS_START -->
             <button class="filter is-active" type="button" data-filter="all" aria-pressed="true">Всё</button>
             <button class="filter" type="button" data-filter="cakes" aria-pressed="false">Торты</button>
             <button class="filter" type="button" data-filter="desserts" aria-pressed="false">Десерты</button>
             <button class="filter" type="button" data-filter="pastry" aria-pressed="false">Выпечка</button>
             <button class="filter" type="button" data-filter="bouquets" aria-pressed="false">Букеты</button>
+            <!-- FILTERS_END -->
           </div>
-          <p class="catalog__count" id="catalogCount">12 позиций</p>
+          <p class="catalog__count" id="catalogCount"><!-- COUNT_START -->12 позиций<!-- COUNT_END --></p>
         </div>
 
         <div class="product-grid" id="productGrid">
+          <!-- PRODUCTS_START -->
           <article class="product" data-category="cakes" data-id="medovik" data-name="Медовик" data-price="1500" data-unit="1,2 кг" data-image="assets/img/product-medovik.jpg">
             <div class="product__media">
               <img src="assets/img/product-medovik.jpg" alt="Медовик с кремом и ореховой крошкой" width="800" height="800" loading="lazy">
@@ -446,6 +449,7 @@
               </div>
             </div>
           </article>
+          <!-- PRODUCTS_END -->
         </div>
       </div>
     </section>
@@ -841,6 +845,7 @@
     <div class="product-modal__grid">
       <div class="product-modal__media">
         <img src="assets/img/product-medovik.jpg" alt="" width="800" height="800" data-modal-image>
+        <div class="product-modal__thumbs" data-modal-thumbs></div>
       </div>
       <div class="product-modal__body">
         <p class="product-modal__meta"><span data-modal-category>Торты</span><span data-modal-unit>1,2 кг</span></p>
@@ -859,7 +864,7 @@
           <button class="button button--primary" type="button" data-modal-add>В корзину</button>
         </div>
         <a class="product-modal__wa" data-modal-wa href="https://wa.me/79188378048" target="_blank" rel="noopener noreferrer"><span data-modal-wa-label>Заказать в WhatsApp</span> <span aria-hidden="true">↗</span></a>
-        <p class="product-modal__note">Состав, наличие и сроки уточним при подтверждении заказа.</p>
+        <p class="product-modal__note" data-modal-note>Состав, наличие и сроки уточним при подтверждении заказа.</p>
       </div>
     </div>
   </dialog>

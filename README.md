@@ -4,9 +4,15 @@
 
 **Адрес:** Владикавказ, ул. Кирова, 53  
 **Телефон / WhatsApp:** 8 (918) 837-80-48  
-**Сайт:** https://youahannn-hash.github.io/aladea-site/  
-**Репозиторий:** https://github.com/youahannn-hash/aladea-site  
+**Сайт (статическая витрина):** https://youahannn-hash.github.io/aladea-site/
+
+**Репозиторий:** https://github.com/youahannn-hash/aladea-site
+
 **Планируемый домен:** `aladea.ru`
+
+**CMS:** `/admin` на Node-сервере, см. [docs/CMS.md](docs/CMS.md)
+
+**Аудит безопасности:** [docs/SECURITY.md](docs/SECURITY.md)
 
 ## Что внутри
 
@@ -17,15 +23,16 @@
 - оформление заказа: имя, телефон, самовывоз/доставка, адрес, дата и комментарий;
 - заявка на индивидуальный торт;
 - отправка готового заказа в WhatsApp (без бэкенда);
+- **CMS `/admin`**: серверная авторизация, товары, категории, загрузка и оптимизация фото, публикация/наличие/акции, поиск, фильтры, сортировка;
+- публичная витрина получает товары из БД на Node-сервере; статический GitHub Pages остаётся fallback-версией;
 - страницы `privacy.html` и `404.html`;
-- SEO-разметка `Bakery` и `FAQPage`, Open Graph, canonical, favicon, web manifest;
-- готов к публикации на GitHub Pages без сборки.
+- SEO-разметка `Bakery` и `FAQPage`, Open Graph, canonical, favicon, web manifest.
 
-Стек — чистые HTML, CSS и JavaScript. Сборка не нужна, сайт можно открыть как статические файлы.
+Стек публичной части — HTML, CSS и vanilla JavaScript. CMS — Node.js + Express + SQLite (`node:sqlite`) + `sharp`/`multer`. Сборка фронтенда не нужна.
 
 ## Локальный запуск
 
-Из корня проекта:
+### Публичная версия без CMS
 
 ```bash
 python -m http.server 4173
@@ -33,26 +40,41 @@ python -m http.server 4173
 
 Откройте `http://127.0.0.1:4173/`.
 
-Если Python нет:
+### Полная версия с CMS
+
+Требуется Node.js 22.9+:
 
 ```bash
-npx serve .
+pnpm install
+cp .env.example .env
+npm run db:seed
+npm run admin:create
+npm start
 ```
+
+- сайт: `http://127.0.0.1:3000/`
+- админка: `http://127.0.0.1:3000/admin`
+- БД: `data/aladea.sqlite` (в Git не попадает)
+- загрузки: `data/uploads` (в Git не попадают)
+
+Сервер при старте сам создаёт схему и заполняет пустую БД текущим каталогом. Администратора нужно создать командой `npm run admin:create`; пароль в коде не хранится.
 
 ## Структура
 
 ```
 .
-├── index.html                 # главная
+├── index.html                 # публичная витрина + fallback-карточки
 ├── privacy.html               # политика конфиденциальности
 ├── 404.html                   # страница ошибки
-├── site.webmanifest
-├── robots.txt
-├── sitemap.xml
-├── assets/
-│   ├── css/styles.css
-│   ├── js/main.js
-│   └── img/                   # изображения и иконки
+├── assets/                    # стили, JS, шрифты, фото
+├── server/                    # Node CMS: Express, SQLite, auth, uploads
+│   ├── sql/schema.postgres.sql
+│   ├── admin.css
+│   ├── admin.js
+│   └── views.mjs
+├── docs/CMS.md                # архитектура, стоимость, миграция
+├── data/                      # БД и загрузки (gitignored)
+├── package.json
 └── .nojekyll
 ```
 
@@ -60,7 +82,7 @@ npx serve .
 
 ### Товары
 
-Товары лежат в `index.html` внутри `#productGrid`. У каждой карточки есть data-атрибуты:
+Основной способ — `/admin` на Node-сервере: изменения сохраняются в SQLite и сразу попадают на витрину. Статические карточки в `index.html` — fallback для GitHub Pages, если сервер не используется. У каждой fallback-карточки есть data-атрибуты:
 
 ```html
 <article class="product reveal"
@@ -121,7 +143,9 @@ npx serve .
 
 ## Публикация на GitHub Pages
 
-Сайт статический, поэтому сборка не нужна. Репозиторий уже создан, Pages включён.
+GitHub Pages публикует **только статическую витрину**. CMS, SQLite и загрузка фото на Pages не работают: для них нужен Node-сервер (VPS, Railway, Render и т. п.). Статическая версия остаётся запасной и не связана с БД.
+
+Сборка не нужна. Репозиторий уже создан, Pages включён.
 
 1. Откройте **Settings → Pages**.
 2. В **Build and deployment → Source** выберите **Deploy from a branch**.

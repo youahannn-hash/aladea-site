@@ -1,0 +1,26 @@
+{
+  "name": "aladea-cms",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Сайт и CMS кондитерской «АлаДея»",
+  "engines": {
+    "node": ">=22.9"
+  },
+  "scripts": {
+    "start": "node --env-file-if-exists=.env server/index.mjs",
+    "dev": "node --env-file-if-exists=.env --watch server/index.mjs",
+    "db:seed": "node --env-file-if-exists=.env server/seed.mjs",
+    "admin:create": "node --env-file-if-exists=.env server/create-admin.mjs"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "multer": "^2.5.0",
+    "sharp": "^0.34.3"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "sharp"
+    ]
+  }
+}
